@@ -9,8 +9,6 @@ init: false
 arch:
   - aarch64
   - amd64
-  - armv7
-  - i386
 ports:
   12321/tcp: 12321
 ports_description:
