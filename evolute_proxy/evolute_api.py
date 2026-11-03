@@ -37,7 +37,7 @@ DUMP_FILE = os.getenv("DUMP_FILE", "/data/dump.json")
 STATUS_FILE = os.getenv("STATUS_FILE", "/data/status.json")
 
 EVOLUTE_REFRESH_URL = "https://app.evassist.ru/id-service/auth/refresh-token"
-EVOLUTE_SENSOR_URL = f"https://app.evassist.ru/client-bff-service/telemetry/{CAR_ID}/info"
+EVOLUTE_SENSOR_URL = f"https://app.evassist.ru/client-bff-service/telemetry/{CAR_ID}"
 EVOLUTE_CAR_INFO_URL = f"https://app.evassist.ru/carv2/{CAR_ID}"
 
 INTELLIGENT_ACTIONS = {
