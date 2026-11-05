@@ -1,76 +1,50 @@
-# modify ip-address here and in the next section
-  - resource: http://127.0.0.1:12321/sensors/all
-    method: GET
-    headers:
-      X-API-Key: "{{ states('input_text.evolute_proxy_token') }}"
-    scan_interval: 60
-    sensor:
-      - name: "Evolute Raw Data"
-        unique_id: evolute_raw_data
-        # Keep state bound to a key that is always present in /sensors/all payload.
-        # diagnostics is often omitted by API, which can make this sensor unavailable.
-        value_template: "{{ value_json.odometer | default(0) }}"
-        unit_of_measurement: "km"
-        icon: mdi:speedometer
-        json_attributes:
-          - odometer
-          - batteryPercentage
-          - remainsMileageFuel
-          - outsideTemp
-          - fuelPercentage
-          - batteryTemp
-          - coolantTemp
-          - inBoardTemp
-          - centralLockingStatus
-          - ready
-          - tachometer
-          - diagnostics
-          - remainsMileage
-          - ignitionStatus
-          - doorFLStatus
-          - doorFRStatus
-          - doorRLStatus
-          - doorRRStatus
-          - trunkStatus
-          - headLightsStatus
-          - "12VBatteryVoltage"
-          - climateFWindowStatus
-          - climateFanSpeed
-          - climateStatus
-          - climateTargetTemp
-          - climateCurentTemp
-          - isOnline
-          - isParked
-          - lastOnlineTime
-          - sensorDataTime
-          - time
-          - vin
-          - carModelName
-          - carModelModname
-          - carModelYear
-          - carModelColor
-          - preparation_scriptIsrunning
-          - preparation_scriptAvailable
-          - preparation_scriptDisabled
-          - preparation_scriptEndTime
-          - preparation_scriptStartTime
-# here
-  - resource: http://127.0.0.1:12321/position/all
-    method: GET
-    headers:
-      X-API-Key: "{{ states('input_text.evolute_proxy_token') }}"
-    scan_interval: 60
-    sensor:
-      - name: "Evolute Location Data"
-        unique_id: evolute_location_data
-        value_template: "{{ value_json.speed }}"
-        unit_of_measurement: "km/h"
-        icon: mdi:speedometer
-        json_attributes:
-          - course
-          - hdop
-          - height
-          - lat
-          - lon
-          - sats
-          - speed
+# Основной REST-сенсор Evolute
+- resource: http://127.0.0.1:12321/sensors/all
+  method: GET
+  headers:
+    X-API-Key: "{{ states('input_text.evolute_proxy_token') }}"
+  scan_interval: 60
+  sensor:
+    - name: "Evolute Raw Data"
+      unique_id: evolute_raw_data
+      value_template: "{{ value_json.odometer | default(0) }}"
+      unit_of_measurement: "km"
+      icon: mdi:speedometer
+      json_attributes:
+        - 12VBatteryVoltage
+        - batteryPercentage
+        - batteryTemp
+        - climateFanSpeed
+        - climateTargetTemp
+        - coolantTemp
+        - course
+        - doorFLStatus
+        - doorFRStatus
+        - doorRLStatus
+        - doorRRStatus
+        - firmwareVersion
+        - fuelPercentage
+        - headLightsStatus
+        - inBoardTemp
+        - isCentralLockingOn
+        - isChargingGunInserted
+        - isIgnitionOn
+        - isParkedOn
+        - isTrunkOpen
+        - lat
+        - lon
+        - odometer
+        - outsideTemp
+        - remainsBatteryMileage
+        - remainsFuelMileage
+        - settingsVersion
+        - signalLevel
+        - trunkStatus
+        - isOnline
+        - onlineState
+        - firmwareCheck
+        - settingsCheck
+        - isCarStateReady
+        - carStateUpdatedAt
+        - positionAt
+        - warnings
