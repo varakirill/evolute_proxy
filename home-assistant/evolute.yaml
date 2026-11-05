@@ -1,4 +1,10 @@
   - sensor:
+      - name: "Evolute Signal Level"
+        unique_id: evolute_signalLevel
+        state: "{{ state_attr('sensor.evolute_raw_data', 'signalLevel') }}"
+        unit_of_measurement: "%"
+        icon: mdi:signal
+        state_class: measurement
       - name: "Evolute 12VBattery Voltage"
         unique_id: evolute_12vbattery_voltage
         state: "{{ state_attr('sensor.evolute_raw_data', '12VBatteryVoltage') }}"
@@ -15,14 +21,14 @@
 
       - name: "Evolute Remaining Mileage (Fuel)"
         unique_id: evolute_remains_mileage_fuel
-        state: "{{ state_attr('sensor.evolute_raw_data', 'remainsMileageFuel') }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'remainsFuelMileage') }}"
         unit_of_measurement: "km"
         icon: mdi:gas-station
         state_class: measurement
 
       - name: "Evolute Remaining Mileage (Battery)"
         unique_id: evolute_remains_mileage_battery
-        state: "{{ state_attr('sensor.evolute_raw_data', 'remainsMileage') }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'remainsBatteryMileage') }}"
         unit_of_measurement: "km"
         icon: mdi:map-marker-distance
         state_class: measurement
@@ -62,18 +68,6 @@
         icon: mdi:thermometer-lines
         state_class: measurement
 
-      - name: "Evolute Diagnostics Code"
-        unique_id: evolute_diagnostics_code
-        state: "{{ state_attr('sensor.evolute_raw_data', 'diagnostics') }}"
-        icon: mdi:alert-circle-outline
-
-      - name: "Evolute Tachometer"
-        unique_id: evolute_tachometer
-        state: "{{ state_attr('sensor.evolute_raw_data', 'tachometer') }}"
-        unit_of_measurement: "RPM"
-        icon: mdi:rotate-right
-        state_class: measurement
-
       - name: "Evolute Odometer"
         unique_id: evolute_odometer
         state: "{{ state_attr('sensor.evolute_raw_data', 'odometer') }}"
@@ -95,141 +89,79 @@
         icon: mdi:thermometer
         state_class: measurement
 
-      - name: "Evolute Climate Current Temp"
-        unique_id: evolute_climate_current_temp
-        state: "{{ state_attr('sensor.evolute_raw_data', 'climateCurentTemp') }}"
-        unit_of_measurement: "°C"
-        icon: mdi:thermometer-auto
-        state_class: measurement
+      - name: "Evolute Online State"
+        unique_id: evolute_online_state
+        state: "{{ state_attr('sensor.evolute_raw_data', 'onlineState') }}"
+        icon: mdi:cloud-check
 
-      - name: "Evolute Last Online Time"
-        unique_id: evolute_last_online_time
-        state: "{{ state_attr('sensor.evolute_raw_data', 'lastOnlineTime') }}"
-        icon: mdi:clock-outline
+      - name: "Evolute Car State Updated At"
+        unique_id: evolute_car_state_updated_at
+        state: >-
+          {% set ts = state_attr('sensor.evolute_raw_data', 'carStateUpdatedAt') | int(0) %}
+          {{ (ts / 1000) | timestamp_local if ts > 0 else 'unavailable' }}
+        device_class: timestamp
+        icon: mdi:clock-check-outline
 
-      - name: "Evolute Sensor Data Time"
-        unique_id: evolute_sensor_data_time
-        state: "{{ state_attr('sensor.evolute_raw_data', 'sensorDataTime') }}"
-        icon: mdi:timeline-clock
-
-      - name: "Evolute VIN"
-        unique_id: evolute_vin
-        state: "{{ state_attr('sensor.evolute_raw_data', 'vin') }}"
-        icon: mdi:card-account-details
-
-      - name: "Evolute Car Model Name"
-        unique_id: evolute_car_model_name
-        state: "{{ state_attr('sensor.evolute_raw_data', 'carModelName') }}"
-        icon: mdi:car-info
-
-      - name: "Evolute Car Model Modname"
-        unique_id: evolute_car_model_modname
-        state: "{{ state_attr('sensor.evolute_raw_data', 'carModelModname') }}"
-        icon: mdi:car-shift-pattern
-
-      - name: "Evolute Car Model Year"
-        unique_id: evolute_car_model_year
-        state: "{{ state_attr('sensor.evolute_raw_data', 'carModelYear') }}"
-        icon: mdi:calendar
-
-      - name: "Evolute Car Model Color"
-        unique_id: evolute_car_model_color
-        state: "{{ state_attr('sensor.evolute_raw_data', 'carModelColor') }}"
-        icon: mdi:palette
-
-      - name: "Evolute Preparation Script End Time"
-        unique_id: evolute_preparation_script_end_time
-        state: "{{ state_attr('sensor.evolute_raw_data', 'preparation_scriptEndTime') }}"
-        unit_of_measurement: "min"
-        icon: mdi:timer-outline
-
-      - name: "Evolute Preparation Script Start Time"
-        unique_id: evolute_preparation_script_start_time
-        state: "{{ state_attr('sensor.evolute_raw_data', 'preparation_scriptStartTime') }}"
-        icon: mdi:clock-start
+      - name: "Evolute Position Updated At"
+        unique_id: evolute_position_updated_at
+        state: >-
+          {% set ts = state_attr('sensor.evolute_raw_data', 'positionAt') | int(0) %}
+          {{ (ts / 1000) | timestamp_local if ts > 0 else 'unavailable' }}
+        device_class: timestamp
+        icon: mdi:map-clock
 
       - name: "Evolute GPS Course"
         unique_id: evolute_gps_course
-        state: "{{ state_attr('sensor.evolute_location_data', 'course') }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'course') }}"
         unit_of_measurement: "°"
         icon: mdi:compass
         state_class: measurement
 
-      - name: "Evolute HDOP"
-        unique_id: evolute_hdop
-        state: "{{ state_attr('sensor.evolute_location_data', 'hdop') }}"
-        icon: mdi:signal
-        unit_of_measurement: ""
-        state_class: measurement
-
-      - name: "Evolute Altitude"
-        unique_id: evolute_altitude
-        state: "{{ state_attr('sensor.evolute_location_data', 'height') }}"
-        unit_of_measurement: "m"
-        icon: mdi:image-filter-hdr
-        state_class: measurement
-
       - name: "Evolute Latitude"
         unique_id: evolute_latitude
-        state: "{{ state_attr('sensor.evolute_location_data', 'lat') }}"
-        unit_of_measurement: "°"
-        icon: mdi:map-marker
-        state_class: measurement
+        state: "{{ state_attr('sensor.evolute_raw_data', 'lat') | float }}"
+        icon: mdi:latitude
 
       - name: "Evolute Longitude"
         unique_id: evolute_longitude
-        state: "{{ state_attr('sensor.evolute_location_data', 'lon') }}"
-        unit_of_measurement: "°"
-        icon: mdi:map-marker
-        state_class: measurement
-
-      - name: "Evolute GPS Satellites"
-        unique_id: evolute_gps_sats
-        state: "{{ state_attr('sensor.evolute_location_data', 'sats') }}"
-        icon: mdi:satellite-variant
-        unit_of_measurement: "sats"
-        state_class: measurement
-
-      - name: "Evolute Speed"
-        unique_id: evolute_speed
-        state: "{{ state_attr('sensor.evolute_location_data', 'speed') }}"
-        unit_of_measurement: "km/h"
-        icon: mdi:speedometer
-        state_class: measurement
+        state: "{{ state_attr('sensor.evolute_raw_data', 'lon') | float }}"
+        icon: mdi:longitude
 
       - name: "Evolute Car Location"
         unique_id: evolute_car_location
         state: >-
-          {% set lat = states('sensor.evolute_latitude') %}
-          {% set lon = states('sensor.evolute_longitude') %}
-          {% if lat not in ['unknown','unavailable','none','None',''] and lon not in ['unknown','unavailable','none','None',''] %}
-            {{ lat }}, {{ lon }}
+          {% set lat = state_attr('sensor.evolute_raw_data', 'lat') %}
+          {% set lon = state_attr('sensor.evolute_raw_data', 'lon') %}
+          {% if lat is not none and lon is not none %}
+            {{ lat | float }}, {{ lon | float }}
           {% else %}
-            unavailable
+            unknown
           {% endif %}
         icon: mdi:map-marker
-        attributes:
-          latitude: "{{ states('sensor.evolute_latitude') | float(0) }}"
-          longitude: "{{ states('sensor.evolute_longitude') | float(0) }}"
 
   - binary_sensor:
       - name: "Evolute Ignition On"
         unique_id: evolute_ignition_on
-        state: "{{ state_attr('sensor.evolute_raw_data', 'ignitionStatus') | int == 1 }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'isIgnitionOn') | bool(false) }}"
         device_class: power
         icon: mdi:engine
 
       - name: "Evolute Central Locking Engaged"
         unique_id: evolute_central_locking
-        state: "{{ state_attr('sensor.evolute_raw_data', 'centralLockingStatus') | int != 1 }}"
+        state: "{{ not (state_attr('sensor.evolute_raw_data', 'isCentralLockingOn') | bool(false)) }}"
         device_class: lock
         icon: mdi:lock
 
       - name: "Evolute Ready Status"
         unique_id: evolute_ready_status
-        state: "{{ state_attr('sensor.evolute_raw_data', 'ready') | int == 1 }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'isCarStateReady') in [true, 'true', 'True', 1, '1'] }}"
         device_class: plug
         icon: mdi:car-electric
+
+      - name: "Evolute Charging Gun Inserted"
+        unique_id: evolute_charging_gun_inserted
+        state: "{{ state_attr('sensor.evolute_raw_data', 'isChargingGunInserted') | bool(false) }}"
+        icon: mdi:ev-plug-type2
 
       - name: "Evolute Door Front Left Open"
         unique_id: evolute_door_fl_open
@@ -257,7 +189,7 @@
 
       - name: "Evolute Trunk Open"
         unique_id: evolute_trunk_open
-        state: "{{ state_attr('sensor.evolute_raw_data', 'trunkStatus') | int == 1 }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'isTrunkOpen') | bool(false) }}"
         device_class: garage_door
         icon: mdi:car-back
 
@@ -269,21 +201,9 @@
 
       - name: "Evolute Parked"
         unique_id: evolute_parked
-        state: "{{ state_attr('sensor.evolute_raw_data', 'isParked') in [true, 'true', 'True', 1, '1'] }}"
+        state: "{{ state_attr('sensor.evolute_raw_data', 'isParkedOn') | bool(false) }}"
         device_class: occupancy
         icon: mdi:car-brake-parking
-
-      - name: "Evolute Climate On"
-        unique_id: evolute_climate_on
-        state: "{{ state_attr('sensor.evolute_raw_data', 'climateStatus') | int == 1 }}"
-        device_class: heat
-        icon: mdi:air-conditioner
-
-      - name: "Evolute Climate Front Defrost"
-        unique_id: evolute_climate_front_defrost
-        state: "{{ state_attr('sensor.evolute_raw_data', 'climateFWindowStatus') | int == 1 }}"
-        device_class: cold
-        icon: mdi:car-windshield
 
       - name: "Evolute Online"
         unique_id: evolute_online
@@ -292,18 +212,3 @@
           {{ v in [true, 'true', 'True', 1, '1'] }}
         device_class: connectivity
         icon: mdi:car-connected
-
-      - name: "Evolute Preparation Script Running"
-        unique_id: evolute_preparation_script_running
-        state: "{{ state_attr('sensor.evolute_raw_data', 'preparation_scriptIsrunning') in [true, 'true', 'True', 1, '1'] }}"
-        icon: mdi:engine-outline
-
-      - name: "Evolute Preparation Script Available"
-        unique_id: evolute_preparation_script_available
-        state: "{{ state_attr('sensor.evolute_raw_data', 'preparation_scriptAvailable') in [true, 'true', 'True', 1, '1'] }}"
-        icon: mdi:check-decagram
-
-      - name: "Evolute Preparation Script Disabled"
-        unique_id: evolute_preparation_script_disabled
-        state: "{{ state_attr('sensor.evolute_raw_data', 'preparation_scriptDisabled') in [true, 'true', 'True', 1, '1'] }}"
-        icon: mdi:cancel
